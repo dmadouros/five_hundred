@@ -32,7 +32,7 @@ module FiveHundred
 
     def initialize(options)
       @value = options[:value]
-      @suit = options[:suit]
+      @suit = Suit.new(options[:suit])
     end
   end
 
@@ -60,15 +60,7 @@ module FiveHundred
 
     def initialize(card, sweep_suit)
       @card = card
-      @sweep_suit = sweep_suit
-    end
-
-    def right_bower?
-      card.value == :jack && sweep_suit == card.suit
-    end
-
-    def left_bower?
-      card.value == :jack && sweep_suit.color == card.suit.color && sweep_suit != card.suit
+      @sweep_suit = Suit.new(sweep_suit)
     end
 
     def call
@@ -87,5 +79,36 @@ module FiveHundred
     private
 
     attr_reader :card, :sweep_suit
+
+    def right_bower?
+      card.value == :jack && sweep_suit == card.suit
+    end
+
+    def left_bower?
+      card.value == :jack && sweep_suit.color == card.suit.color && sweep_suit != card.suit
+    end
+  end
+
+  class Suit
+    def initialize(suit)
+      @suit = suit
+    end
+
+    def color
+      {
+        :hearts => :red,
+        :diamonds => :red,
+        :clubs => :black,
+        :spades => :black,
+      }.fetch(suit)
+    end
+
+    def ==(other)
+      self.class == other.class && suit == other.suit
+    end
+
+    protected
+
+    attr_reader :suit
   end
 end

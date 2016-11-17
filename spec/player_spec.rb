@@ -42,17 +42,11 @@ module FiveHundred
       card = Card.new(value: 7, suit: :hearts)
 
       expect(card.value).to eq 7
-      expect(card.suit).to eq :hearts
+      expect(card.suit).to eq Suit.new(:hearts)
     end
   end
 
   describe CardScore do
-    it 'should know a bower when it sees one' do
-      card = Card.new(value: :jack, suit: :hearts)
-
-      expect(CardScore.new(card, :hearts).right_bower?).to be true
-    end
-
     it 'should calculate score for joker' do
       card = Card.new(value: :joker)
 
@@ -82,6 +76,26 @@ module FiveHundred
         card = Card.new(value: :jack, suit: :clubs)
 
         expect(CardScore.new(card, :hearts).call).to eq 8
+      end
+    end
+  end
+
+  describe Suit do
+    describe '#color' do
+      it 'should know hearts are red' do
+        expect(Suit.new(:hearts).color).to eq :red
+      end
+
+      it 'should know diamonds are a girls best friend' do
+        expect(Suit.new(:diamonds).color).to eq :red
+      end
+
+      it 'should know clubs are black' do
+        expect(Suit.new(:clubs).color).to eq :black
+      end
+
+      it 'should know spades are black' do
+        expect(Suit.new(:spades).color).to eq :black
       end
     end
   end
