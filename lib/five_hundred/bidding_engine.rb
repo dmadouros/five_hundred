@@ -28,11 +28,23 @@ module FiveHundred
   end
 
   class Card
-    attr_reader :value, :suit
+    attr_reader :name, :suit
 
     def initialize(options)
-      @value = options[:value]
-      @suit = Suit.new(options[:suit])
+      @name = options[:name]
+      @suit = options[:suit]
+    end
+
+    def right_bower?(suit)
+      name == :jack && self.suit == suit
+    end
+
+    def left_bower?(suit)
+      name == :jack && self.suit.color == suit.color && self.suit != suit
+    end
+
+    def score(suit)
+      CardScore.new(self, suit).call
     end
   end
 
@@ -58,57 +70,64 @@ module FiveHundred
     :joker        => 14
 =end
 
-    def initialize(card, sweep_suit)
+    def initialize(card, suit)
       @card = card
-      @sweep_suit = Suit.new(sweep_suit)
+      @suit = suit
     end
 
     def call
-      return 13 if right_bower?
-      return 12 if left_bower?
+      return 13 if card.right_bower?(suit)
+      return 12 if card.left_bower?(suit)
 
-      card_values = {
-        joker: 14,
-        ace: 11,
-        jack: 8,
-      }
-
-      card_values[card.value]
+      values[card.name]
     end
 
     private
 
-    attr_reader :card, :sweep_suit
+    attr_reader :card, :suit
 
-    def right_bower?
-      card.value == :jack && sweep_suit == card.suit
-    end
-
-    def left_bower?
-      card.value == :jack && sweep_suit.color == card.suit.color && sweep_suit != card.suit
+    def values
+      {
+        joker: 14,
+        ace: 11,
+        jack: 8,
+      }
     end
   end
 
   class Suit
-    def initialize(suit)
-      @suit = suit
+    class << self
+      def hearts
+        new(:hearts, :red)
+      end
+
+      def diamonds
+        new(:diamonds, :red)
+      end
+
+      def spades
+        new(:spades, :black)
+      end
+
+      def clubs
+        new(:clubs, :black)
+      end
     end
 
-    def color
-      {
-        :hearts => :red,
-        :diamonds => :red,
-        :clubs => :black,
-        :spades => :black,
-      }.fetch(suit)
-    end
+    attr_reader :color
 
     def ==(other)
-      self.class == other.class && suit == other.suit
+      self.class == other.class && name == other.name
+    end
+
+    private
+    def initialize(name, color)
+      @name = name
+      @color = color
     end
 
     protected
 
-    attr_reader :suit
+    attr_reader :name
   end
 end

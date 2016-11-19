@@ -35,47 +35,47 @@ module FiveHundred
 
   describe Card do
     it 'should handle joker' do
-      expect(Card.new(value: :joker).value).to be :joker
+      expect(Card.new(name: :joker).name).to be :joker
     end
 
     it 'should determine suit' do
-      card = Card.new(value: 7, suit: :hearts)
+      card = Card.new(name: 7, suit: Suit.hearts)
 
-      expect(card.value).to eq 7
-      expect(card.suit).to eq Suit.new(:hearts)
+      expect(card.name).to eq 7
+      expect(card.suit).to eq Suit.hearts
     end
   end
 
   describe CardScore do
     it 'should calculate score for joker' do
-      card = Card.new(value: :joker)
+      card = Card.new(name: :joker)
 
       expect(CardScore.new(card, nil).call).to eq 14
     end
 
     it 'should calculate score for ace' do
-      card = Card.new(value: :ace)
+      card = Card.new(name: :ace)
 
       expect(CardScore.new(card, nil).call).to eq 11
     end
 
     describe 'jacks' do
       it 'should calculate score for right bower' do
-        card = Card.new(value: :jack, suit: :hearts)
+        card = Card.new(name: :jack, suit: Suit.hearts)
 
-        expect(CardScore.new(card, :hearts).call).to eq 13
+        expect(CardScore.new(card, Suit.hearts).call).to eq 13
       end
 
       it 'should calculate score for left bower' do
-        card = Card.new(value: :jack, suit: :diamonds)
+        card = Card.new(name: :jack, suit: Suit.diamonds)
 
-        expect(CardScore.new(card, :hearts).call).to eq 12
+        expect(CardScore.new(card, Suit.hearts).call).to eq 12
       end
 
       it 'should calculate score for jack' do
-        card = Card.new(value: :jack, suit: :clubs)
+        card = Card.new(name: :jack, suit: Suit.clubs)
 
-        expect(CardScore.new(card, :hearts).call).to eq 8
+        expect(CardScore.new(card, Suit.hearts).call).to eq 8
       end
     end
   end
@@ -83,19 +83,19 @@ module FiveHundred
   describe Suit do
     describe '#color' do
       it 'should know hearts are red' do
-        expect(Suit.new(:hearts).color).to eq :red
+        expect(Suit.hearts.color).to eq :red
       end
 
       it 'should know diamonds are a girls best friend' do
-        expect(Suit.new(:diamonds).color).to eq :red
+        expect(Suit.diamonds.color).to eq :red
       end
 
       it 'should know clubs are black' do
-        expect(Suit.new(:clubs).color).to eq :black
+        expect(Suit.clubs.color).to eq :black
       end
 
       it 'should know spades are black' do
-        expect(Suit.new(:spades).color).to eq :black
+        expect(Suit.spades.color).to eq :black
       end
     end
   end
