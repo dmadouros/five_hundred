@@ -36,18 +36,21 @@ module FiveHundred
       hand = Hand.new
       [
         Card.new(name: :joker),
+        Card.new(name: :jack, suit: Suit.hearts),
+        Card.new(name: :jack, suit: Suit.diamonds),
         Card.new(name: :ace, suit: Suit.hearts),
         Card.new(name: :king, suit: Suit.hearts),
         Card.new(name: :queen, suit: Suit.hearts),
-        Card.new(name: :jack, suit: Suit.hearts),
-        Card.new(name: :jack, suit: Suit.diamonds),
         Card.new(name: :ten, suit: Suit.hearts),
         Card.new(name: :nine, suit: Suit.hearts),
         Card.new(name: :eight, suit: Suit.hearts),
         Card.new(name: :seven, suit: Suit.hearts),
       ].each { |card| hand.receive(card) }
 
-      expect(hand.score).to eq 95
+      expect(hand.score(Suit.hearts)).to eq 91
+      expect(hand.score(Suit.diamonds)).to eq 39
+      expect(hand.score(Suit.clubs)).to eq 14
+      expect(hand.score(Suit.spades)).to eq 14
     end
   end
 
@@ -140,13 +143,13 @@ module FiveHundred
     end
 
     it 'should calculate score for five' do
-      card = Card.new(name: :six)
+      card = Card.new(name: :five)
 
       expect(CardScore.new(card, nil).call).to eq 2
     end
 
     it 'should calculate score for four' do
-      card = Card.new(name: :six)
+      card = Card.new(name: :four)
 
       expect(CardScore.new(card, nil).call).to eq 1
     end
