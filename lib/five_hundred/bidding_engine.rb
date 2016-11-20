@@ -22,6 +22,13 @@ module FiveHundred
       @cards
     end
 
+    def score(suit)
+      contents.inject(0) do |sum, card|
+        score = CardScore.new(card, suit).call
+        sum + score
+      end
+    end
+
     private
 
     attr_reader :cards
@@ -78,6 +85,8 @@ module FiveHundred
     def call
       return 13 if card.right_bower?(suit)
       return 12 if card.left_bower?(suit)
+      return 14 if card.name == :joker
+      return 0 unless trump_suit?
 
       values[card.name]
     end
@@ -86,11 +95,23 @@ module FiveHundred
 
     attr_reader :card, :suit
 
+    def trump_suit?
+      suit == card.suit
+    end
+
     def values
       {
-        joker: 14,
-        ace: 11,
+        four: 1,
+        five: 2,
+        six: 3,
+        seven: 4,
+        eight: 5,
+        nine: 6,
+        ten: 7,
         jack: 8,
+        queen: 9,
+        king: 10,
+        ace: 11,
       }
     end
   end

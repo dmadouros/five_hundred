@@ -32,25 +32,47 @@ module FiveHundred
       expect(hand.contents).to eq([card])
     end
 
-    it 'should calculate score of perfect hearts hand' do
-      hand = Hand.new
-      [
-        Card.new(name: :joker),
-        Card.new(name: :jack, suit: Suit.hearts),
-        Card.new(name: :jack, suit: Suit.diamonds),
-        Card.new(name: :ace, suit: Suit.hearts),
-        Card.new(name: :king, suit: Suit.hearts),
-        Card.new(name: :queen, suit: Suit.hearts),
-        Card.new(name: :ten, suit: Suit.hearts),
-        Card.new(name: :nine, suit: Suit.hearts),
-        Card.new(name: :eight, suit: Suit.hearts),
-        Card.new(name: :seven, suit: Suit.hearts),
-      ].each { |card| hand.receive(card) }
+    context 'perfect hearts hand' do
+      let(:hand) { Hand.new }
 
-      expect(hand.score(Suit.hearts)).to eq 91
-      expect(hand.score(Suit.diamonds)).to eq 39
-      expect(hand.score(Suit.clubs)).to eq 14
-      expect(hand.score(Suit.spades)).to eq 14
+      before do
+        [
+          Card.new(name: :joker),
+          Card.new(name: :jack, suit: Suit.hearts),
+          Card.new(name: :jack, suit: Suit.diamonds),
+          Card.new(name: :ace, suit: Suit.hearts),
+          Card.new(name: :king, suit: Suit.hearts),
+          Card.new(name: :queen, suit: Suit.hearts),
+          Card.new(name: :ten, suit: Suit.hearts),
+          Card.new(name: :nine, suit: Suit.hearts),
+          Card.new(name: :eight, suit: Suit.hearts),
+          Card.new(name: :seven, suit: Suit.hearts),
+        ].each { |card| hand.receive(card) }
+      end
+
+      context 'when trump suit is hearts' do
+        it 'should calculate score' do
+          expect(hand.score(Suit.hearts)).to eq 91
+        end
+      end
+
+      context 'when trump suit is diamonds' do
+        it 'should calculate score' do
+          expect(hand.score(Suit.diamonds)).to eq 39
+        end
+      end
+
+      context 'when trump suit is clubs' do
+        it 'should calculate score' do
+          expect(hand.score(Suit.clubs)).to eq 14
+        end
+      end
+
+      context 'when trump suit is spades' do
+        it 'should calculate score' do
+          expect(hand.score(Suit.spades)).to eq 14
+        end
+      end
     end
   end
 
@@ -108,7 +130,7 @@ module FiveHundred
       it 'should calculate score for jack' do
         card = Card.new(name: :jack, suit: Suit.clubs)
 
-        expect(CardScore.new(card, Suit.hearts).call).to eq 8
+        expect(CardScore.new(card, Suit.hearts).call).to eq 0
       end
     end
 
