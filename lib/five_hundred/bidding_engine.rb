@@ -1,7 +1,6 @@
 module FiveHundred
   class BiddingEngine
     def initialize(hand)
-
     end
 
     def bid
@@ -24,8 +23,7 @@ module FiveHundred
 
     def score(suit)
       contents.inject(0) do |sum, card|
-        score = CardScore.new(card, suit).call
-        sum + score
+        sum + CardScore.new(card, suit).call
       end
     end
 
@@ -83,12 +81,18 @@ module FiveHundred
     end
 
     def call
-      return 13 if card.right_bower?(suit)
-      return 12 if card.left_bower?(suit)
-      return 14 if card.name == :joker
-      return 0 unless trump_suit?
+      # David: If you hate this, you can change it back!
+      # It has a little hidden cleverness because if you
+      # move the first or second line down at all, it fails...
+      # "why" is left as an exercise to the reader :-)
 
-      values[card.name]
+      {
+        true => values[card.name],
+        !trump_suit? => 0,
+        card.left_bower?(suit) => 12,
+        card.right_bower?(suit) => 13,
+        card.name == :joker => 14,
+      }[true]
     end
 
     private
@@ -148,7 +152,6 @@ module FiveHundred
     end
 
     protected
-
     attr_reader :name
   end
 end
