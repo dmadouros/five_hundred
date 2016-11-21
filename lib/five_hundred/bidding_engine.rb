@@ -8,6 +8,15 @@ module FiveHundred
     end
   end
 
+  class Bid
+    attr_reader :tricks, :suit
+
+    def initialize(tricks, suit)
+      @tricks = tricks
+      @suit = suit
+    end
+  end
+
   class Hand
     def initialize
       @cards = []

@@ -5,20 +5,27 @@ module FiveHundred
     it 'should pass on empty hand' do
       hand = Hand.new
 
-      expect(BiddingEngine.new(hand).bid).to eq :pass
+      expect(BiddingEngine.new(hand).bid).to be_nil
     end
 
-    it 'should bid on amazing hand' do
-      # Joker
-      # Right bower
-      # Left bower
-      # Ace
-      # King
-      # Queen
-      # 10
-      # 9
-      # 8
-      # 7
+    it 'should bid on perfect hearts hand' do
+      hand = Hand.new
+      [
+        Card.new(name: :joker),
+        Card.new(name: :jack, suit: Suit.hearts),
+        Card.new(name: :jack, suit: Suit.diamonds),
+        Card.new(name: :ace, suit: Suit.hearts),
+        Card.new(name: :king, suit: Suit.hearts),
+        Card.new(name: :queen, suit: Suit.hearts),
+        Card.new(name: :ten, suit: Suit.hearts),
+        Card.new(name: :nine, suit: Suit.hearts),
+        Card.new(name: :eight, suit: Suit.hearts),
+        Card.new(name: :seven, suit: Suit.hearts),
+      ].each do |card|
+        hand.receive(card)
+      end
+
+      expect(BiddingEngine.new(hand).bid).to eq Bid.new(7, Suit.spades)
     end
   end
 
